@@ -31,7 +31,7 @@
 
     'use strict';
 
-    function cssbeautify(style, opt) {
+     function cssbeautify(style, opt) {
 
         var options, index = 0, length = style.length, blocks, formatted = '',
             ch, ch2, str, state, State, depth, quote, comment,
@@ -95,7 +95,8 @@
 
             if (formatted.length > 0 && autosemicolon) {
                 last = formatted.charAt(formatted.length - 1);
-                if (last !== ';' && last !== '{') {
+				last2 = formatted.charAt(formatted.length - 2);
+                if (last !== ';' && last !== '{' && last2 !='*' && last!= '/') {
                     formatted += ';';
                 }
             }
@@ -144,7 +145,7 @@
             index += 1;
 
             // Inside a string literal?
-            if (isQuote(quote)) {
+            if (isQuote(quote) && comment ==false) {
                 formatted += ch;
                 if (ch === quote) {
                     quote = null;
@@ -158,7 +159,7 @@
             }
 
             // Starting a string literal?
-            if (isQuote(ch)) {
+            if (isQuote(ch) && comment ==false) {
                 formatted += ch;
                 quote = ch;
                 continue;
@@ -175,6 +176,7 @@
                 continue;
             }
             if (ch === '/' && ch2 === '*') {
+				appendIndent()
                 comment = true;
                 formatted += ch;
                 formatted += ch2;
